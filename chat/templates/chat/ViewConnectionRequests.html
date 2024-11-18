@@ -1,0 +1,23 @@
+{% extends "chat/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1>MyConnection Requests</h1>
+
+{% if received_requests %}
+    {% for request in received_requests %}
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top"  src="{{ request.sender.image.url }}" alt="Card image cap">
+            <div class="card-body">
+            <p><strong>{{ request.sender.user.username }}</strong> wants to connect with you.</p>
+            <a href="{% url 'approve_connection_request' request.id %}" class="btn btn-success">Approve</a>
+            <a href="{% url 'reject_connection_request' request.id %}" class="btn btn-danger">Reject</a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+  <p>No connection requests.</p>
+{% endif %}
+
+{% endblock %}

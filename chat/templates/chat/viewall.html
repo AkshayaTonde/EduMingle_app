@@ -1,0 +1,23 @@
+{% extends "chat/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>View all students</h1>
+
+{% for profile in profiles %}
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="{{ profile.image.url }}" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">{{ profile.user.username }}</h5>
+            <p class="card-text">{{ profile.school_name }}</p>
+            
+            <!-- Form to send connection request -->
+            <form action="{% url 'send_connection_request' profile.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Send Connection Request</button>
+            </form>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock content %}
