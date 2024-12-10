@@ -1,0 +1,23 @@
+{% extends "chat/base.html" %} {% load crispy_forms_tags %} {% block content %}
+{% if show_alert %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var userConfirmed = confirm("You have already taken the quiz. Do you want to retake it?");
+        if (userConfirmed) {
+            // Redirect to the same view with a "clear previous" flag
+            window.location.href = "{% url 'take_quiz' %}?clear_previous=true";
+        } else {
+            // Redirect to another page if they decline
+            window.location.href = "{% url 'profile' %}";
+        }
+    });
+</script>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Quiz</button>
+</form>
+
+{% endblock content %}

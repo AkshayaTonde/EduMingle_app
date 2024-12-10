@@ -1,18 +1,34 @@
-{% extends "chat/base.html" %} {% load crispy_forms_tags %} {% block content %}
+{% extends "chat/base.html" %} 
+
+{% load crispy_forms_tags %} 
+
+{% block content %}
 <div class="content-section">
-  <form method="POST">
-    {% csrf_token %}
-    <fieldset class="form-group">
-      <legend class="border-bottom mb-4">
-        🏴‍☠️Ahoy! Enter a room name to join
-      </legend>
-      {{ form|crispy }}
-    </fieldset>
-    <div class="form-group">
-      <button class="btn btn-outline-info" type="submit">
-        Start Blabbering 🦜!
-      </button>
-    </div>
-  </form>
+  <div>
+ 
 </div>
+<div>
+  <h1>Your Chatrooms</h1>
+  <div>
+    {% if approved_requests %}
+      <ul>
+          {% for request in approved_requests %}
+              <h3>{{request.chatroomname}}</h3>
+                  {% if request.sender == request.user.profile %}
+                      <p>You are connected with <strong>{{ request.receiver.user.username }}</strong>.</p>
+                  {% else %}
+                      <p>You are connected with <strong>{{ request.sender.user.username }}</strong>.</p>
+                  {% endif %}
+                  <a href="{% url 'chat-room' request.chatroomname %}" class="btn btn-primary">Start Chat</a>
+          {% endfor %}
+      </ul>
+  {% else %}
+      <p>You have no approved connections yet.</p>
+  {% endif %}
+  </div>
+
+</div>
+
+</div>
+
 {% endblock content %}

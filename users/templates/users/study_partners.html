@@ -1,0 +1,27 @@
+{% extends "chat/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h2>Study Partner Matches</h2>
+<ul>
+    {% if matches %}
+    {% for profile, score, is_connected in matches %}
+    <li>
+        {{ profile.user.username }} - Compatibility Score: {{ score|floatformat:2 }}
+        {% if not is_connected %}
+            <form method="post" action="{% url 'send_connection_request' profile.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Send Connection Request</button>
+            </form>
+        {% else %}
+            <p>Already Connected</p>
+        {% endif %}
+        <a href="{% url 'view_profile' profile.id %}">View Profile</a>
+    </li>
+{% endfor %}
+
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+</ul>
+{% endblock content %}

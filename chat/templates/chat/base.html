@@ -16,29 +16,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     {% if title %}
-        <title>Django Chat App - {{ title }}</title>
+        <title>Edu Mingle - {{ title }}</title>
     {% else %}
-        <title>Django Chat App</title>
+        <title>Edu Mingle</title>
     {% endif %}
 </head>
 <body>
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-          <a class="navbar-brand mr-4" href="{% url 'chat-home' %}">Django Chat App</a>
+          <a class="navbar-brand mr-4" href="{% url 'chat-home' %}">Edu Mingle</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{% url 'chat-home' %}">Home</a>
-              
+              {% if user.is_authenticated %}
+              <a class="nav-item nav-link" href="{% url 'my_connections' %}">My Connections</a>
+              <a class="nav-item nav-link" href="{% url 'viewall' %}">Explore</a>
+              <a class="nav-item nav-link" href="{% url 'viewmyconnectionrequests' %}">View Requests</a>
+              <a class="nav-item nav-link" href="{% url 'take_quiz' %}">Take a Quiz</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              {% if user.is_authenticated %}
-              <a class="nav-item nav-link" href="{% url 'viewall' %}">View All Peers</a>
-              <a class="nav-item nav-link" href="{% url 'viewmyconnectionrequests' %}">Connection Requests</a>
+              
               <img width="50px" class="rounded-circle" style="max-height: 40px; max-width: 40px;" src="{{user.profile.image.url}}">
                 <a class="nav-item nav-link" href="{% url 'profile' %}"> Profile</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
@@ -68,22 +70,24 @@
         </div>
         <div class="col-md-4">
           <div class="content-section">
-            <h3>Public Servers</h3>
-            <p class='text-muted'>Explore our public servers! DM admin for more servers!
-              <ul class="list-group">
-                {% if rooms is None %}
-                <li class="list-group-item list-group-item-light"> No public servers available ATM </li>
-                {% else %}
-                {% for room in rooms %}
-                <li class="list-group-item list-group-item-light">
-                    <a href="{% url 'chat-room' room.slug %}">
-                        {{room.name}}
-                    </a> 
-                </li>
-                {% endfor %}
-                {% endif %}
-              </ul>
-            </p>
+            <h3>Study Tips</h3>
+            <ul>
+              <li>Use the <strong>Pomodoro Technique</strong>: Work for 25 minutes, then take a 5-minute break.</li>
+              <li>Practice <strong>Active Recall</strong>: Test yourself after studying a concept to improve retention.</li>
+              <li>Summarize what you’ve learned and <strong>teach it to someone else</strong>.</li>
+            </ul>
+          </div>
+          <div class="content-section">
+            <h3>Motivation for the day</h3>
+            <iframe 
+              width="100%" 
+              height="200" 
+              src="https://www.youtube.com/embed/ZXsQAXx_ao0" 
+              title="YouTube video player" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen>
+            </iframe>
           </div>
         </div>
       </div>

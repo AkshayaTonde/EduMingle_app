@@ -1,0 +1,38 @@
+{% extends "chat/base.html" %}
+
+{% block content %}
+<h2>My Connections</h2>
+
+<ul>
+    {% if connections %}
+        {% for connection in connections %}
+            <li>
+                {% if connection.sender == request.user.profile %}
+                    Connected with: {{ connection.receiver.user.username }}
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="{{ connection.receiver.user.profile.image.url }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ connection.receiver.user.profile.user.username }}</h5>
+                            <p class="card-text">{{ connection.receiver.user.profile.school_name }}</p>
+                            <p class="card-text">{{ connection.receiver.user.profile.user_bio }}</p>
+                        </div>
+                    </div>
+
+                {% else %}
+                    Connected with: {{ connection.sender.user.username }}
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="{{ connection.sender.user.profile.image.url }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ connection.sender.user.profile.user.username }}</h5>
+                            <p class="card-text">{{ connection.sender.user.profile.school_name }}</p>
+                            <p class="card-text">{{ connection.sender.user.profile.user_bio }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    {% else %}
+        <p>You have no approved connections yet.</p>
+    {% endif %}
+</ul>
+{% endblock content %}

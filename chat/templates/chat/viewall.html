@@ -10,7 +10,7 @@
         <div class="card-body">
             <h5 class="card-title">{{ profile.user.username }}</h5>
             <p class="card-text">{{ profile.school_name }}</p>
-            
+            <p class="card-text">{{ profile.school_name }}</p>
             <!-- Form to send connection request -->
             <form action="{% url 'send_connection_request' profile.id %}" method="post">
                 {% csrf_token %}

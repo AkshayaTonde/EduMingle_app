@@ -1,101 +1,51 @@
-import json
-from asgiref.sync import sync_to_async
-
-from channels.auth import login, logout
 from channels.generic.websocket import AsyncWebsocketConsumer
-
-from . models import Message
-
+import json
+from .models import Message, Room
 
 class ChatConsumer(AsyncWebsocketConsumer):
-    """
-    A consumer does three things:
-    1. Accepts connections.
-    2. Receives messages from client.
-    3. Disconnects when the job is done.
-    """
-
     async def connect(self):
-        """
-        Connect to a room
-        """
-        # Connect only if the user is authenticated
-        user = self.scope['user']
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'chat_{self.room_name}'
 
-        if user.is_authenticated:
-            self.room_name = self.scope['url_route']['kwargs']['room_name']
-            # self.room_group_name = 'chat_%s' % self.room_name
-            self.room_group_name = f"chat_{self.room_name}"
-
-            # Join room group
-            await self.channel_layer.group_add(
-                self.room_group_name,
-                self.channel_name
-            )
-            await self.accept()
-
-        else:
-            await self.send({"close": True})
+        # Join room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.accept()
 
     async def disconnect(self, close_code):
-        """
-        Disconnect from channel
-
-        :param close_code: optional
-        """
+        # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
     async def receive(self, text_data):
-        """
-        Receive messages from WebSocket
+        data = json.loads(text_data)
+        message_content = data['message']
+        user = self.scope['user']
 
-        :param text_data: message
-        """
-
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        username = text_data_json['username']
-        profile_pic = text_data_json['profile_pic']
-        room = text_data_json['room']
-
-        # Save message to DB
-        await self.save_message(message, username, profile_pic, room)
-
+        # Get the room instance and save the message
+        room = Room.objects.get(slug=self.room_name)
+        message = Message.objects.create(room=room, user=user, content=message_content)
+        
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message,
-                'username': username,
-                'profile_pic': profile_pic,
-                'room': room,
+                'message': message_content,
+                'username': user.username
             }
         )
 
     async def chat_message(self, event):
-        """
-        Receive messages from room group
-
-        :param event: Events to pick up
-        """
-        message = event['message']
+        message_content = event['message']
         username = event['username']
-        profile_pic = event['profile_pic']
-        room = event['room']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': message,
-            'username': username,
-            'profile_pic': profile_pic,
-            'room': room,
+            'message': message_content,
+            'username': username
         }))
-
-    @sync_to_async
-    def save_message(self, message, username, profile_pic, room):
-        Message.objects.create(
-            message_content=message, username=username, profile_pic=profile_pic, room=room)

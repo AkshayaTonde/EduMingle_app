@@ -29,6 +29,11 @@ urlpatterns = [
     path('profile/', user_views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
+    path('take_quiz/', user_views.take_quiz , name='take_quiz'),
+    path('study_partners_knn/', user_views.find_study_partners_knn, name='study_partners_knn'),
+    path('view-profile/<int:profile_id>/', user_views.view_profile, name='view_profile'),
+    path('my-connections/', user_views.my_connections, name='my_connections'),
+    #path('chat/', include(('chat.urls', 'chat'), namespace='chat')),
     path('', include('chat.urls')),
 ]
 
