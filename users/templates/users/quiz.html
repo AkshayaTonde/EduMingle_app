@@ -1,6 +1,12 @@
-{% extends "chat/base.html" %} {% load crispy_forms_tags %} {% block content %}
-{% if show_alert %}
-<script>
+{% extends "chat/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center mb-4">Take the Quiz</h2>
+
+  {% if show_alert %}
+  <script>
     document.addEventListener("DOMContentLoaded", function() {
         var userConfirmed = confirm("You have already taken the quiz. Do you want to retake it?");
         if (userConfirmed) {
@@ -11,13 +17,20 @@
             window.location.href = "{% url 'profile' %}";
         }
     });
-</script>
-{% endif %}
+  </script>
+  {% endif %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit Quiz</button>
-</form>
-
+  <!-- Quiz Form -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="text-center">
+          <button type="submit" class="btn btn-success mt-3">Submit Quiz</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock content %}

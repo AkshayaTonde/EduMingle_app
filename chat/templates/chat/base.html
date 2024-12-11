@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -16,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     {% if title %}
-        <title>Edu Mingle - {{ title }}</title>
+        <title>Edu Mingle</title>
     {% else %}
         <title>Edu Mingle</title>
     {% endif %}
@@ -69,29 +70,47 @@
           {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">
-          <div class="content-section">
-            <h3>Study Tips</h3>
-            <ul>
-              <li>Use the <strong>Pomodoro Technique</strong>: Work for 25 minutes, then take a 5-minute break.</li>
-              <li>Practice <strong>Active Recall</strong>: Test yourself after studying a concept to improve retention.</li>
-              <li>Summarize what you’ve learned and <strong>teach it to someone else</strong>.</li>
-            </ul>
-          </div>
-          <div class="content-section">
-            <h3>Motivation for the day</h3>
-            <iframe 
-              width="100%" 
-              height="200" 
-              src="https://www.youtube.com/embed/ZXsQAXx_ao0" 
-              title="YouTube video player" 
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-            </iframe>
-          </div>
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h5 class="card-title text-center">Study Tips</h5>
+              <ul class="list-unstyled">
+                <li>✔ Use the <strong>Pomodoro Technique</strong>: Work for 25 minutes, then take a 5-minute break.</li>
+                <li>✔ Practice <strong>Active Recall</strong>: Test yourself after studying a concept to improve retention.</li>
+                <li>✔ Summarize what you've learned and <strong>teach it to someone else</strong>.</li>
+              </ul>
+            </div>
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title text-center">Motivation for the Day</h5>
+                <div class="ratio ratio-16x9">
+                  <iframe
+                    src="https://www.youtube.com/embed/ZXsQAXx_ao0"
+                    title="Motivational Video"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
+
+
+      
     </main>
+
+    <footer class="bg-dark text-white text-center text-lg-start">
+      <div class="container p-2 d-flex justify-content-center">
+        <!-- Row -->
+        <div class="row">
+          <!-- Column 1 -->
+            <p class="mb-0">
+              Developed by Akshaya, Gunjan, Preethi  © 2024 Edu Mingle
+            </p>
+        </div>
+      </div>
+  
+    </footer>
+    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -100,3 +119,4 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
+

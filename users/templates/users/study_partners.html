@@ -2,26 +2,37 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h2>Study Partner Matches</h2>
-<ul>
-    {% if matches %}
-    {% for profile, score, is_connected in matches %}
-    <li>
-        {{ profile.user.username }} - Compatibility Score: {{ score|floatformat:2 }}
-        {% if not is_connected %}
-            <form method="post" action="{% url 'send_connection_request' profile.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Send Connection Request</button>
-            </form>
-        {% else %}
-            <p>Already Connected</p>
-        {% endif %}
-        <a href="{% url 'view_profile' profile.id %}">View Profile</a>
-    </li>
-{% endfor %}
+<div class="container my-5">
+  <h2 class="text-center mb-4">Study Partner Matches</h2>
 
-    {% else %}
-        <p>{{ message }}</p>
-    {% endif %}
-</ul>
+  {% if matches %}
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        {% for profile, score, is_connected in matches %}
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{ profile.user.username }}</h5>
+              <p class="card-text">
+                <strong>Compatibility Score:</strong> {{ score|floatformat:2 }}
+              </p>
+              {% if not is_connected %}
+                <form method="post" action="{% url 'send_connection_request' profile.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success w-100 mb-2">Send Connection Request</button>
+                </form>
+              {% else %}
+                <p class="text-success">Already Connected</p>
+              {% endif %}
+              <a href="{% url 'view_profile' profile.id %}" class="btn btn-primary w-100">View Profile</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      <p>{{ message }}</p>
+    </div>
+  {% endif %}
+</div>
 {% endblock content %}

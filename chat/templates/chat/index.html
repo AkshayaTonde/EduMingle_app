@@ -1,3 +1,4 @@
+
 {% extends "chat/base.html" %} 
 
 {% load crispy_forms_tags %} 
@@ -7,24 +8,34 @@
   <div>
  
 </div>
-<div>
-  <h1>Your Chatrooms</h1>
-  <div>
+<div class="col-lg-12">
+  <h1 class="text-center mb-4">Your Chatrooms</h1>
+  <div class="card shadow-sm p-4 border-0 h-100">
     {% if approved_requests %}
-      <ul>
-          {% for request in approved_requests %}
-              <h3>{{request.chatroomname}}</h3>
+      <ul class="list-group">
+        {% for request in approved_requests %}
+          <li class="list-group-item mb-4 p-4 shadow-sm" style="background-color: #d4edda; border-radius: 10px;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h3 class="h5 text-success">{{ request.chatroomname }}</h3>
+                <p class="mb-0">
                   {% if request.sender == request.user.profile %}
-                      <p>You are connected with <strong>{{ request.receiver.user.username }}</strong>.</p>
+                    You are connected with <strong>{{ request.receiver.user.username }}</strong>.
                   {% else %}
-                      <p>You are connected with <strong>{{ request.sender.user.username }}</strong>.</p>
+                    You are connected with <strong>{{ request.sender.user.username }}</strong>.
                   {% endif %}
-                  <a href="{% url 'chat-room' request.chatroomname %}" class="btn btn-primary">Start Chat</a>
-          {% endfor %}
+                </p>
+              </div>
+              <a href="{% url 'chat-room' request.chatroomname %}" class="btn btn-success btn-lg">Start Chat</a>
+            </div>
+          </li>
+        {% endfor %}
       </ul>
-  {% else %}
-      <p>You have no approved connections yet.</p>
-  {% endif %}
+    {% else %}
+      <div class="alert alert-info text-center" role="alert">
+        You have no approved connections yet.
+      </div>
+    {% endif %}
   </div>
 
 </div>

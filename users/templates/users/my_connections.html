@@ -1,38 +1,59 @@
 {% extends "chat/base.html" %}
 
 {% block content %}
-<h2>My Connections</h2>
+<div class="container my-5">
+  <h2 class="text-center mb-4">My Connections</h2>
 
-<ul>
-    {% if connections %}
+  {% if connections %}
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
         {% for connection in connections %}
-            <li>
-                {% if connection.sender == request.user.profile %}
-                    Connected with: {{ connection.receiver.user.username }}
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="{{ connection.receiver.user.profile.image.url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ connection.receiver.user.profile.user.username }}</h5>
-                            <p class="card-text">{{ connection.receiver.user.profile.school_name }}</p>
-                            <p class="card-text">{{ connection.receiver.user.profile.user_bio }}</p>
-                        </div>
-                    </div>
-
-                {% else %}
-                    Connected with: {{ connection.sender.user.username }}
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="{{ connection.sender.user.profile.image.url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ connection.sender.user.profile.user.username }}</h5>
-                            <p class="card-text">{{ connection.sender.user.profile.school_name }}</p>
-                            <p class="card-text">{{ connection.sender.user.profile.user_bio }}</p>
-                        </div>
-                    </div>
-                {% endif %}
-            </li>
+          <div class="card shadow-sm mb-4">
+            {% if connection.sender == request.user.profile %}
+              <!-- Receiver's Profile Card -->
+              <div class="row g-0">
+                <div class="col-md-4 text-center">
+                  <img 
+                    src="{{ connection.receiver.user.profile.image.url }}" 
+                    alt="Profile Picture" 
+                    class="img-fluid rounded-start" 
+                    style="max-height: 150px; object-fit: cover;">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title text-primary">{{ connection.receiver.user.username }}</h5>
+                    <p class="card-text"><strong>School:</strong> {{ connection.receiver.user.profile.school_name }}</p>
+                    <p class="card-text"><strong>Bio:</strong> {{ connection.receiver.user.profile.user_bio }}</p>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <!-- Sender's Profile Card -->
+              <div class="row g-0">
+                <div class="col-md-4 text-center">
+                  <img 
+                    src="{{ connection.sender.user.profile.image.url }}" 
+                    alt="Profile Picture" 
+                    class="img-fluid rounded-start" 
+                    style="max-height: 150px; object-fit: cover;">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title text-primary">{{ connection.sender.user.username }}</h5>
+                    <p class="card-text"><strong>School:</strong> {{ connection.sender.user.profile.school_name }}</p>
+                    <p class="card-text"><strong>Bio:</strong> {{ connection.sender.user.profile.user_bio }}</p>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
         {% endfor %}
-    {% else %}
-        <p>You have no approved connections yet.</p>
-    {% endif %}
-</ul>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      <p>You have no approved connections yet.</p>
+    </div>
+  {% endif %}
+</div>
 {% endblock content %}

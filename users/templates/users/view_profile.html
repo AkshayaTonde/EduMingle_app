@@ -1,14 +1,42 @@
 {% extends "chat/base.html" %}
 
-{% load crispy_forms_tags %} 
+{% load crispy_forms_tags %}
 
 {% block content %}
-<h1>Profile Details</h1>
-    <p><strong>Username:</strong> {{ profile.user.username }}</p>
-    <p><strong>School Name:</strong> {{ profile.school_name }}</p>
-    <p><strong>Preferred Subjects:</strong> {{ profile.preferred_subjects }}</p>
-    <p><strong>Study Type:</strong> {{ profile.study_type }}</p>
-    <p><strong>Bio:</strong> {{ profile.user_bio }}</p>
-    <img src="{{ user.profile.image.url }}" alt="Profile Picture" width="150">
-
+<div class="container my-5">
+  <h1 class="text-center mb-4">Profile Details</h1>
+  
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-8">
+      <div class="card shadow-sm">
+        <!-- Profile Picture -->
+        <div class="text-center mt-4">
+          <img 
+            src="{{ profile.image.url }}" 
+            alt="Profile Picture" 
+            class="rounded-circle img-fluid" 
+            style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #6c757d;">
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <p class="card-text">
+            <strong>Username:</strong> {{ profile.user.username }}
+          </p>
+          <p class="card-text">
+            <strong>School Name:</strong> {{ profile.school_name }}
+          </p>
+          <p class="card-text">
+            <strong>Preferred Subjects:</strong> {{ profile.preferred_subjects }}
+          </p>
+          <p class="card-text">
+            <strong>Study Type:</strong> {{ profile.study_type }}
+          </p>
+          <p class="card-text">
+            <strong>Bio:</strong> {{ profile.user_bio }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
