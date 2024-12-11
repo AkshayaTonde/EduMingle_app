@@ -1,122 +1,87 @@
 {% extends "chat/base.html" %}
 
 {% block content %}
-<!-- chatroom.html -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">{{ room_name }}</h2>
+    
+    <!-- Chat Messages -->
+    <div id="chat-messages" class="border rounded p-3 mb-4" style="height: 300px; overflow-y: scroll;">
+        {% if db_messages %}
+            {% for message in db_messages %}
+                <p><strong>{{ message.user.username }}:</strong> {{ message.content }}</p>
+                {% if message.file %}
+                    <p><a href="{{ message.file.url }}" download>{{ message.file.name }}</a></p>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No messages yet.</p>
+        {% endif %}
+    </div>
 
-<div id="chat-messages">
-    {% if db_messages %}
-        {% for message in db_messages %}
-            <p><strong>{{ message.user.username }}:</strong> {{ message.content }}</p>
-            {% if message.file %}
-                <p><a href="{{ message.file.url }}" download>{{ message.file.name }}</a></p>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>No messages yet.</p>
-    {% endif %}
+    <!-- Chat Form -->
+    <form id="chat-form" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+        {% csrf_token %}
+        <input id="message-input" class="form-control me-2" type="text" placeholder="Type your message here..." required>
+        <input id="file-input" class="form-control-file me-2" type="file" style="max-width: 200px;">
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
 </div>
 
-
-<form id="chat-form" method="post">
-    {% csrf_token %}
-    <input id="message-input" type="text" placeholder="Type your message here...">
-    <input id="file-input" type="file">
-    <button type="submit">Send</button>
-</form>
-
+<!-- JavaScript -->
 <script>
-const roomName = "{{ room_name }}";
-const chatSocket = new WebSocket(
-    'ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+    const roomName = "{{ room_name }}";
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
 
-chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    const messageElement = document.createElement('p');
-    if (data.file_url) {
-        messageElement.innerHTML = `<strong>${data.username}:</strong> <a href="${data.file_url}" target="_blank">Download file</a>`;
-    } else {
-        messageElement.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
-    }
-    document.querySelector('#chat-messages').appendChild(messageElement);
-};
+    // Listen for messages from the server
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatMessages = document.querySelector('#chat-messages');
+        const messageElement = document.createElement('p');
 
-document.querySelector('#chat-form').onsubmit = function(e) {
-    e.preventDefault();
-    const messageInputDom = document.querySelector('#message-input');
-    const fileInputDom = document.querySelector('#file-input');
-    const message = messageInputDom.value;
+        if (data.file_url) {
+            messageElement.innerHTML = `<strong>${data.username}:</strong> <a href="${data.file_url}" target="_blank">Download file</a>`;
+        } else {
+            messageElement.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+        }
 
-    if (fileInputDom.files.length > 0) {
-        const file = fileInputDom.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        fetch(`/upload/${roomName}/`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.file_url) {
-                chatSocket.send(JSON.stringify({
-                    'file_url': data.file_url
-                }));
-            }
-            messageInputDom.value = '';
-            fileInputDom.value = '';
-        });
-    } else {
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-        messageInputDom.value = '';
-    }
-};
+        chatMessages.appendChild(messageElement);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the latest message
+    };
 
+    // Handle form submission
+    document.querySelector('#chat-form').onsubmit = function(e) {
+        e.preventDefault();
+        const messageInput = document.querySelector('#message-input');
+        const fileInput = document.querySelector('#file-input');
+        const message = messageInput.value;
 
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
 
-if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-}
-
-chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    const messageElement = document.createElement('p');
-    if (data.file_url) {
-        messageElement.innerHTML = `<strong>${data.username}:</strong> <a href="${data.file_url}" target="_blank">Download file</a>`;
-    } else {
-        messageElement.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
-    }
-    document.querySelector('#chat-messages').appendChild(messageElement);
-
-    if (Notification.permission === "granted") {
-        new Notification(`New message from ${data.username}`, {
-            body: data.message || "File attached",
-            icon: "/static/icons/chat-icon.png"  // Update with your icon path
-        });
-    }
-};
-
-
-const chatSocket = new WebSocket(
-    'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
-);
-
-chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    const messageContainer = document.getElementById('chat-messages');
-
-    // Display received message
-    const newMessage = document.createElement('p');
-    newMessage.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
-    messageContainer.appendChild(newMessage);
-};
-
-chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
-};
-
-
+            fetch(`/upload/${roomName}/`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.file_url) {
+                    chatSocket.send(JSON.stringify({
+                        'file_url': data.file_url
+                    }));
+                }
+                messageInput.value = '';
+                fileInput.value = '';
+            });
+        } else {
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInput.value = '';
+        }
+    };
 </script>
-
 {% endblock %}

@@ -1,6 +1,5 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
 import json
-from .models import Message, Room
+from channels.generic.websocket import AsyncWebsocketConsumer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -23,29 +22,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message_content = data['message']
-        user = self.scope['user']
+        message = data.get('message', None)
+        file_url = data.get('file_url', None)
 
-        # Get the room instance and save the message
-        room = Room.objects.get(slug=self.room_name)
-        message = Message.objects.create(room=room, user=user, content=message_content)
-        
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message_content,
-                'username': user.username
+                'username': self.scope["user"].username,
+                'message': message,
+                'file_url': file_url,
             }
         )
 
     async def chat_message(self, event):
-        message_content = event['message']
-        username = event['username']
-
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': message_content,
-            'username': username
+            'username': event['username'],
+            'message': event.get('message', None),
+            'file_url': event.get('file_url', None),
         }))
