@@ -108,16 +108,6 @@ Here’s an example **procedure** section for your application based on the prov
 
 ---
 
-Let me know if you’d like to refine or expand any part of this!
-
-```py
-user = self.scope['user']
-if user.is_authenticated:
-    // authenticated user connection 
-else:
-    // unauthenticated acces - disconnect/close
-```
-
 ### Resources
 1. [Django Tutorial - Corey Schafer](https://www.youtube.com/watch?v=UmljXZIypDc&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p) 
 2. [Django Channels - RealPython](https://realpython.com/getting-started-with-django-channels/)
