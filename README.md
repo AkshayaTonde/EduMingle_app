@@ -5,7 +5,7 @@
   <h3 align="center">Edu Mingle</h3>
 
 
-# Chat Application 
+# Edu Mingle Application 
 
 A simple chat application that covers Django authorization, web sockets and authentication.
 
