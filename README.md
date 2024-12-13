@@ -2,15 +2,8 @@
 <br />
 <p align="center">
   <span style="font-family:Papyrus; font-size:50px;"><img src="images/chat.svg" width="200" height="200"></span>
-  <h3 align="center">Chat Application</h3>
+  <h3 align="center">Edu Mingle</h3>
 
-  <p align="center">
-    Hello from the other side
-    <br />
-    <br />
-    <a href="https://github.com/rustyxlol/Django-ChatApp/issues">Report Bug</a>
-  </p>
-</p>
 
 # Chat Application 
 
