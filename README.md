@@ -45,16 +45,70 @@ python manage.py migrate
 
 5. Navigate to http://127.0.0.1:8000 on a browser of your choice.
 
+Here’s an example **procedure** section for your application based on the provided example structure:
+
+---
+
 ## Procedure
-### Part 1 - Login and Signup Forms
-1. Users model
-2. **Pages:** Login, Signup, Home, Profile, (part of send message, more in next part)
-3. CRUD operations on profile(username, profile picture...)
-### Part 2 - Chat application
-1. Channels Library 
-2. Implementing basic functionality first then redoing it in async
-3. TODO: Redis can come during production, channel layer is set to `InMemoryChannelLayer` for development.
-4. Converted basic functionality to async
+
+### Part 1 - User Management (Login, Signup, Profile Management)
+1. **Users Model**:
+   - Utilized the `Profile` model to extend user information (e.g., profile picture, bio, study preferences).
+   - One-to-one relationship with Django’s built-in `User` model.
+
+2. **Pages**:
+   - **Login**: Allows existing users to log in.
+   - **Signup**: New users can register with necessary details.
+   - **Home**: Dashboard showing user-specific details or global updates.
+   - **Profile**: Enables users to view and edit their profiles.
+
+3. **CRUD Operations**:
+   - Users can update their profile information, including username, profile picture, and bio.
+   - Admin functionality for managing user accounts.
+
+---
+
+### Part 2 - Study Partner Matching
+1. **Study Partners Functionality**:
+   - Matches users based on quiz responses using the K-Nearest Neighbors (KNN) algorithm.
+   - Displays matched profiles with their compatibility scores.
+
+2. **Pages**:
+   - **Quiz**: Users complete a quiz to provide inputs for matching.
+   - **Study Partners**: Lists matched users with options to view profiles or send connection requests.
+
+3. **Connection Requests**:
+   - Users can send, accept, or reject connection requests.
+   - Only approved connections appear in the "My Connections" page.
+
+---
+
+### Part 3 - Chat Application (For Connected Users)
+1. **Channels Library**:
+   - Integrated Django Channels to enable real-time messaging between connected users.
+
+2. **Async Implementation**:
+   - Implemented basic chat functionality and transitioned to an asynchronous model for better scalability.
+   - Utilized `InMemoryChannelLayer` during development for testing real-time communication.
+
+3. **Production-Ready Enhancements**:
+   - Plan to integrate **Redis** as the channel layer during production for better performance and scalability.
+   - Added functionality to create and join chat rooms dynamically.
+
+---
+
+### Part 4 - Deployment
+1. **Free Hosting**:
+   - Plan to deploy on **Render** or **PythonAnywhere** for free hosting.
+   - Configured PostgreSQL as the database for production deployment.
+
+2. **Next Steps**:
+   - Add HTTPS support for security.
+   - Monitor and test the app for scalability and performance issues.
+
+---
+
+Let me know if you’d like to refine or expand any part of this!
 
 ```py
 user = self.scope['user']
