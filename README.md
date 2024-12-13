@@ -19,8 +19,7 @@ A simple chat application that covers Django authorization, web sockets and auth
 ## Setup 🛠
 1. Clone or download the repository  
 ```bash
-git clone https://github.com/rustyxlol/Django-ChatApp.git
-cd chat-app-django
+git clone https://github.com/AkshayaTonde/EduMingle_app.git
 ```
 2. Create and activate virtual environment
 ```bash
